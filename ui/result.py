@@ -96,3 +96,58 @@ class ResultPage(QWidget):
 
         # Perbarui grafik
         self.update_graph(result)
+
+    def setup_ui(self):
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(18)
+
+        # ===== JUDUL =====
+        title = QLabel("Hasil Pendekatan Akar")
+        title.setStyleSheet("""
+            font-size: 30px;
+            font-weight: bold;
+            color: #E8EEFF;
+        """)
+
+        subtitle = QLabel(
+            "Hasil perhitungan berdasarkan fungsi, "
+            "turunan, dan tebakan awal yang diinput."
+        )
+        subtitle.setStyleSheet(
+            "color: #A9B5D0; font-size: 15px;"
+        )
+
+        layout.addWidget(title)
+        layout.addWidget(subtitle)
+
+        # ===== KARTU HASIL =====
+        result_card = QFrame()
+        result_card.setStyleSheet("""
+            QFrame {
+                background-color: #21405A;
+                border-radius: 18px;
+            }
+        """)
+        result_card.setMinimumHeight(125)
+
+        card_layout = QHBoxLayout(result_card)
+        card_layout.setContentsMargins(25, 20, 25, 20)
+
+        self.root_value = self.create_result_value(
+            "Akar Hampiran", "0.0000"
+        )
+
+        self.iteration_value = self.create_result_value(
+            "Solusi Ditemukan", "-"
+        )
+
+        self.error_value = self.create_result_value(
+            "Galat Akhir", "0.0000"
+        )
+
+        card_layout.addLayout(self.root_value[0])
+        card_layout.addLayout(self.iteration_value[0])
+        card_layout.addLayout(self.error_value[0])
+
+        layout.addWidget(result_card)
