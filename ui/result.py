@@ -61,3 +61,38 @@ class ResultPage(QWidget):
                 status = "Proses"
                 background = QColor("#050B26")
                 foreground = QColor("#E8EEFF")
+
+            # ===== DATA SETIAP KOLOM =====
+            values = [
+                str(data["n"]),
+                f'{data["x"]:.6f}',
+                f'{data["fx"]:.6f}',
+                f'{data["dfx"]:.6f}',
+                f'{data["x_baru"]:.6f}',
+                f'{data["galat"]:.6f}',
+                status
+            ]
+
+            # ===== MASUKKAN DATA KE TABEL =====
+            for col, value in enumerate(values):
+                item = QTableWidgetItem(value)
+
+                item.setTextAlignment(
+                    Qt.AlignmentFlag.AlignCenter
+                )
+
+                item.setBackground(QBrush(background))
+                item.setForeground(QBrush(foreground))
+
+                self.table.setItem(row, col, item)
+
+            self.table.setRowHeight(row, 48)
+            # Perbarui grafik berdasarkan hasil perhitungan
+            self.update_graph(result)
+
+        # Reset tabel ke tampilan ringkas
+        self.expanded = False
+        self.adjust_table_height()
+
+        # Perbarui grafik
+        self.update_graph(result)
