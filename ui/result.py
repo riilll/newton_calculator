@@ -221,3 +221,115 @@ class ResultPage(QWidget):
         """)
 
         layout.addWidget(self.table)
+
+        # ===== TOMBOL EXPAND TABEL =====
+        self.btn_expand = QPushButton("▼ Tampilkan Semua Iterasi")
+        self.btn_expand.setFixedHeight(42)
+
+        self.btn_expand.setStyleSheet("""
+            QPushButton {
+                background-color: #1B2949;
+                color: #42D7D0;
+                border: 1px solid #304061;
+                border-radius: 10px;
+                padding: 10px 20px;
+                font-size: 14px;
+                text-align: center;
+            }
+
+            QPushButton:hover {
+                background-color: #263A5B;
+            }
+        """)
+
+        layout.addWidget(self.btn_expand)
+
+        self.expanded = False
+        self.btn_expand.clicked.connect(self.toggle_table)
+                # ===== JUDUL GRAFIK =====
+        graph_title = QLabel("Grafik Fungsi")
+        graph_title.setStyleSheet("""
+            font-size: 26px;
+            font-weight: bold;
+            color: #E8EEFF;
+        """)
+
+        layout.addSpacing(20)
+        layout.addWidget(graph_title)
+
+        # ===== GRAFIK =====
+        self.graph = self.create_graph()
+        self.graph.setMinimumHeight(350)
+
+        layout.addWidget(self.graph)
+
+        # ===== TOMBOL HITUNG LAGI =====
+        self.btn_again = QPushButton("Hitung Lagi  ↗")
+        self.btn_again.setFixedSize(190, 55)
+        self.btn_again.setStyleSheet("""
+            QPushButton {
+                background-color: #39BEDD;
+                color: #06142E;
+                border: none;
+                border-radius: 13px;
+                font-size: 18px;
+                text-align: center;
+            }
+
+            QPushButton:hover {
+                background-color: #55D8E5;
+            }
+        """)
+
+        layout.addWidget(self.btn_again)
+        layout.addStretch()
+
+    def toggle_table(self):
+        self.expanded = not self.expanded
+        self.adjust_table_height()
+
+    def adjust_table_height(self):
+        total_rows = self.table.rowCount()
+
+        if self.expanded:
+            visible_rows = total_rows
+            self.btn_expand.setText("▲ Sembunyikan Iterasi")
+        else:
+            visible_rows = min(5, total_rows)
+            self.btn_expand.setText(
+                f"▼ Tampilkan Semua Iterasi ({total_rows})"
+            )
+
+        header_height = self.table.horizontalHeader().height()
+
+        rows_height = sum(
+            self.table.rowHeight(row)
+            for row in range(visible_rows)
+        )
+
+        self.table.setFixedHeight(
+            header_height + rows_height + 4
+        )
+
+    def create_result_value(self, title, value):
+        container = QVBoxLayout()
+        container.setSpacing(10)
+
+        label = QLabel(title)
+        label.setStyleSheet(
+            "color: #42D7D0; font-size: 15px;"
+        )
+
+        number = QLabel(value)
+        number.setStyleSheet("""
+            color: #42D7D0;
+            font-size: 32px;
+            font-weight: 500;
+        """)
+
+        container.addWidget(label)
+        container.addWidget(number)
+
+        return container, number
+
+    def create_graph(self):
