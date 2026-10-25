@@ -125,7 +125,7 @@ class HistoryPage(QWidget):
                 "color: #A9B5D0; font-size: 13px;"
             )
 
-info_layout.addWidget(function_label)
+            info_layout.addWidget(function_label)
             info_layout.addWidget(akar_label)
             info_layout.addWidget(status_label)
 
@@ -156,4 +156,4 @@ info_layout.addWidget(function_label)
 
             self.history_layout.addWidget(card)
 
-        self.history_layout.addStretch()
+            self.history_layout.addStretch()
