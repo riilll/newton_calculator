@@ -26,3 +26,17 @@ class ResultPage(QWidget):
         jumlah = result["jumlah_iterasi"]
         galat = result["galat_akhir"]
         konvergen = result["konvergen"]
+
+        # ===== UPDATE KARTU HASIL =====
+        self.root_value[1].setText(f"{akar:.6f}")
+
+        iterasi_solusi = result.get("iterasi_solusi")
+
+        if iterasi_solusi is not None:
+            self.iteration_value[1].setText(
+                f"Iterasi ke-{iterasi_solusi + 1}"
+            )
+        else:
+            self.iteration_value[1].setText("Belum ditemukan")
+        
+        self.error_value[1].setText(f"{galat:.8f}")
