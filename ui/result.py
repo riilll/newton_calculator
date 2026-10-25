@@ -151,3 +151,73 @@ class ResultPage(QWidget):
         card_layout.addLayout(self.error_value[0])
 
         layout.addWidget(result_card)
+
+        # ===== JUDUL TABEL =====
+        table_title = QLabel("Tabel Iterasi")
+        table_title.setStyleSheet("""
+            font-size: 26px;
+            font-weight: bold;
+            color: #E8EEFF;
+        """)
+
+        formula = QLabel(
+            "xₙ₊₁ = xₙ − f(xₙ) / f′(xₙ)"
+        )
+        formula.setStyleSheet(
+            "color: #A9B5D0; font-size: 13px;"
+        )
+
+        layout.addWidget(table_title)
+        layout.addWidget(formula)
+
+        # ===== TABEL ITERASI =====
+        self.table = QTableWidget()
+        self.table.setColumnCount(7)
+
+        self.table.setHorizontalHeaderLabels([
+            "n", "xₙ", "f(xₙ)",
+            "f′(xₙ)", "xₙ₊₁", "Galat", "Status"
+        ])
+
+        self.table.horizontalHeader().setSectionResizeMode(
+            QHeaderView.ResizeMode.Stretch
+        )
+
+        self.table.verticalHeader().setVisible(False)
+        self.table.setEditTriggers(
+            QAbstractItemView.EditTrigger.NoEditTriggers
+        )
+        self.table.setSelectionMode(
+            QAbstractItemView.SelectionMode.NoSelection
+        )
+        self.table.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.table.setMinimumHeight(260)
+
+        self.table.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
+
+        self.table.setStyleSheet("""
+            QTableWidget {
+                background-color: #050B26;
+                color: #E8EEFF;
+                border: none;
+                gridline-color: transparent;
+                font-size: 14px;
+            }
+
+            QHeaderView::section {
+                background-color: #1B2949;
+                color: #A9B5D0;
+                border: none;
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            QTableWidget::item {
+                padding: 10px;
+                border: none;
+            }
+        """)
+
+        layout.addWidget(self.table)
