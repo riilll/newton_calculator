@@ -40,3 +40,24 @@ class ResultPage(QWidget):
             self.iteration_value[1].setText("Belum ditemukan")
         
         self.error_value[1].setText(f"{galat:.8f}")
+
+        # ===== JUMLAH BARIS TABEL =====
+        self.table.setRowCount(len(iterasi))
+
+        for row, data in enumerate(iterasi):
+
+            # ===== TENTUKAN STATUS =====
+            if data["solusi"]:
+                status = "✓ Solusi"
+                background = QColor("#174D4A")
+                foreground = QColor("#55E6D5")
+
+            elif row == len(iterasi) - 1 and not konvergen:
+                status = "Belum Konvergen"
+                background = QColor("#594322")
+                foreground = QColor("#FFD27A")
+
+            else:
+                status = "Proses"
+                background = QColor("#050B26")
+                foreground = QColor("#E8EEFF")
