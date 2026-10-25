@@ -12,14 +12,14 @@ Anggota:
 4. As-Sajadah Khaira | 250810701100005
 
 
-== FITUR ==
+## FITUR 
 - Turunan otomatis: cukup ketik `f(x)`, kolom `f′(x)` terisi sendiri (memakai SymPy).
 - Tabel iterasi: menampilkan `n`, `xₙ`, `f(xₙ)`, `f′(xₙ)`, `xₙ₊₁`, galat, dan status tiap iterasi.
 - Grafik fungsi dengan penanda titik akar (Matplotlib).
 - Riwayat perhitungan: hasil sebelumnya bisa dibuka kembali.
 - Validasi input: toleransi, iterasi maksimum, turunan mendekati nol, nilai tidak valid, dan lainnya.
 
-== DOWNLOAD LIBRARY ==
+## DOWNLOAD LIBRARY ==
 Pastikan Python 3.9+ sudah terpasang, lalu jalankan:
     pip install -r requirements.txt
 
