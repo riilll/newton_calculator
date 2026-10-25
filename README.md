@@ -7,9 +7,9 @@ xₙ₊₁ = xₙ − f(xₙ) / f′(xₙ)
 Kelompok 3
 Anggota: 
 1. Muhammad Fahril Khalifi | 250810701100002
-2. Muhammad Reza Nurhakim | 2508107011000
-3. Aulia Faradina | 250810701100019
-4. As-Sajadah Khaira | 250810701100005
+2. Muhammad Reza Nurhakim  | 250810701100054
+3. Aulia Faradina          | 250810701100019
+4. As-Sajadah Khaira       | 250810701100005
 
 
 ## FITUR 
@@ -19,7 +19,7 @@ Anggota:
 - Riwayat perhitungan: hasil sebelumnya bisa dibuka kembali.
 - Validasi input: toleransi, iterasi maksimum, turunan mendekati nol, nilai tidak valid, dan lainnya.
 
-## DOWNLOAD LIBRARY ==
+## DOWNLOAD LIBRARY 
 Pastikan Python 3.9+ sudah terpasang, lalu jalankan:
     pip install -r requirements.txt
 
