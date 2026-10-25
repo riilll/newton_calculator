@@ -140,3 +140,20 @@ class NewtonApp(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+
+    # ===== LOAD FONT POPPINS =====
+    font_folder = Path(__file__).resolve().parent / "assets" / "fonts"
+
+    for font_file in font_folder.glob("*.ttf"):
+        QFontDatabase.addApplicationFont(str(font_file))
+
+    app.setFont(QFont("Poppins", 10))
+
+    window = NewtonApp()
+    window.show()
+
+    sys.exit(app.exec())
