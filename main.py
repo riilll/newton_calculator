@@ -483,6 +483,155 @@ class NewtonApp(QWidget):
             # ekspresi yang belum lengkap
             self.input_derivative.clear()
 
+    def calculate_root(self):
+        try:
+            # 1. Ambil teks dari kolom input
+            fungsi_teks = self.input_function.text().strip()
+            turunan_teks = self.input_derivative.text().strip()
+            if not fungsi_teks:
+                QMessageBox.warning(
+                    self,
+                    "Input Kosong",
+                    "Silakan masukkan fungsi f(x) terlebih dahulu."
+                )
+                return
+
+            if not turunan_teks:
+                QMessageBox.warning(
+                    self,
+                    "Fungsi Tidak Valid",
+                    "Turunan otomatis belum berhasil dihitung. "
+                    "Periksa kembali penulisan fungsi f(x)."
+                )
+                return
+
+            x0 = float(self.input_initial.text())
+            toleransi = float(self.input_tolerance.text())
+            max_iterasi = int(self.input_iteration.text())
+
+            # 2. Validasi parameter
+            if not fungsi_teks or not turunan_teks:
+                raise ValueError(
+                    "Fungsi dan turunan tidak boleh kosong."
+                )
+
+            if not math.isfinite(x0):
+                raise ValueError(
+                    "Tebakan awal harus berupa angka terbatas."
+                )
+
+            if not math.isfinite(toleransi) or toleransi <= 0:
+                raise ValueError(
+                    "Toleransi harus lebih besar dari nol."
+                )
+
+            if not 1 <= max_iterasi <= 1000:
+                raise ValueError(
+                    "Iterasi maksimum harus antara 1 dan 1000."
+                )
+
+            # 3. Membaca ekspresi matematika
+            x = symbols("x")
+
+            transformations = (
+                standard_transformations
+                + (implicit_multiplication_application, convert_xor)
+            )
+
+            allowed_names = {
+                "x": x,
+                "sin": __import__("sympy").sin,
+                "cos": __import__("sympy").cos,
+                "tan": __import__("sympy").tan,
+                "exp": __import__("sympy").exp,
+                "log": __import__("sympy").log,
+                "sqrt": __import__("sympy").sqrt,
+            }
+
+            # Gunakan hanya pada ekspresi yang dipercaya.
+            # parse_expr tidak aman untuk input sembarang pengguna.
+            fungsi_expr = parse_expr(
+                fungsi_teks,
+                local_dict=allowed_names,
+                transformations=transformations
+            )
+
+            turunan_expr = parse_expr(
+                turunan_teks,
+                local_dict=allowed_names,
+                transformations=transformations
+            )
+
+            # 4. Periksa variabel dan turunan
+            if not fungsi_expr.free_symbols <= {x}:
+                raise ValueError(
+                    "Fungsi hanya boleh menggunakan variabel x."
+                )
+
+            if not turunan_expr.free_symbols <= {x}:
+                raise ValueError(
+                    "Turunan hanya boleh menggunakan variabel x."
+                )
+
+            turunan_asli = diff(fungsi_expr, x)
+
+            if simplify(turunan_asli - turunan_expr) != 0:
+                raise ValueError(
+                    "Turunan tidak sesuai dengan fungsi f(x)."
+                )
+
+            # 5. Ubah ekspresi menjadi fungsi numerik
+            f = lambdify(x, fungsi_expr, modules="math")
+            df = lambdify(x, turunan_expr, modules="math")
+
+            # 6. Jalankan Newton-Raphson
+            akar, iterasi, iterasi_solusi = newton_raphson(
+                f,
+                df,
+                x0,
+                toleransi,
+                max_iterasi
+            )
+
+            if not math.isfinite(akar):
+                raise ValueError(
+                    "Perhitungan menghasilkan nilai tidak valid."
+                )
+
+            jumlah_iterasi = len(iterasi)
+
+            if iterasi_solusi is not None:
+                galat_akhir = iterasi[iterasi_solusi]["galat"]
+            else:
+                galat_akhir = iterasi[-1]["galat"]
+
+            # 7. Simpan hasil untuk halaman berikutnya
+            self.last_result = {
+                "fungsi": fungsi_teks,
+                "turunan": turunan_teks,
+                "akar": akar,
+                "jumlah_iterasi": jumlah_iterasi,
+                "galat_akhir": galat_akhir,
+                "iterasi": iterasi,
+                "iterasi_solusi": iterasi_solusi,
+                "konvergen": iterasi_solusi is not None
+            }
+        except (
+            ValueError,
+            ZeroDivisionError,
+            OverflowError,
+            TypeError,
+            SympifyError,
+            SyntaxError
+        ) as error:
+            QMessageBox.warning(
+                self,
+                "Kesalahan Perhitungan",
+                str(error)
+            )
+
+
+
 
 
 
