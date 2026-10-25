@@ -434,7 +434,55 @@ class NewtonApp(QWidget):
 
             button.style().unpolish(button)
             button.style().polish(button)
-            button.update()   
+            button.update()
+
+    def update_derivative(self):
+        fungsi_teks = self.input_function.text().strip()
+
+        # Kalau input kosong, kosongkan turunannya
+        if not fungsi_teks:
+            self.input_derivative.clear()
+            return
+
+        try:
+            x = sp.symbols("x")
+
+            transformations = (
+                standard_transformations
+                + (
+                    implicit_multiplication_application,
+                    convert_xor
+                )
+            )
+
+            # Ubah teks menjadi ekspresi matematika
+            fungsi = parse_expr(
+                fungsi_teks,
+                transformations=transformations,
+                local_dict={
+                    "x": x,
+                    "sin": sp.sin,
+                    "cos": sp.cos,
+                    "tan": sp.tan,
+                    "exp": sp.exp,
+                    "log": sp.log,
+                    "sqrt": sp.sqrt
+                }
+            )
+
+            # Hitung turunan otomatis
+            turunan = sp.diff(fungsi, x)
+
+            # Tampilkan dalam format yang mudah dibaca
+            turunan_teks = str(turunan).replace("**", "^")
+
+            self.input_derivative.setText(turunan_teks)
+
+        except (Exception):
+            # Ketika pengguna masih mengetik
+            # ekspresi yang belum lengkap
+            self.input_derivative.clear()
+
 
 
 
