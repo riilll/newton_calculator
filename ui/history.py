@@ -124,3 +124,22 @@ class HistoryPage(QWidget):
             status_label.setStyleSheet(
                 "color: #A9B5D0; font-size: 13px;"
             )
+
+info_layout.addWidget(function_label)
+            info_layout.addWidget(akar_label)
+            info_layout.addWidget(status_label)
+
+            btn_open = QPushButton("Lihat Hasil →")
+            btn_open.setFixedSize(150, 45)
+            btn_open.setStyleSheet("""
+                QPushButton {
+                    background-color: #21445E;
+                    color: #42D7D0;
+                    border-radius: 10px;
+                    text-align: center;
+                }
+
+                QPushButton:hover {
+                    background-color: #305C75;
+                }
+            """)
