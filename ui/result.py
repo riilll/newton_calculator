@@ -333,3 +333,140 @@ class ResultPage(QWidget):
         return container, number
 
     def create_graph(self):
+
+        # Membuat wadah grafik
+        self.figure = Figure(
+            figsize=(8, 4),
+            facecolor="#1B2949"
+        )
+
+        self.canvas = FigureCanvasQTAgg(self.figure)
+
+        # Membuat area koordinat
+        self.ax = self.figure.add_subplot(111)
+
+        # Menyesuaikan warna grafik
+        self.ax.set_facecolor("#1B2949")
+
+        return self.canvas
+
+    def update_graph(self, result):
+        # Mengambil fungsi dan akar
+        fungsi_teks = result["fungsi"]
+        akar = result["akar"]
+
+        # Membaca fungsi matematika
+        x = sp.symbols("x")
+
+        fungsi_expr = sp.sympify(
+            fungsi_teks.replace("^", "**")
+        )
+
+        f = sp.lambdify(x, fungsi_expr, "numpy")
+
+        # Membuat rentang grafik di sekitar akar
+        x_values = np.linspace(
+            akar - 3,
+            akar + 3,
+            500
+        )
+
+        y_values = f(x_values)
+
+        # Bersihkan grafik sebelumnya
+        self.ax.clear()
+
+        # Warna latar
+        self.ax.set_facecolor("#1B2949")
+
+        # Gambar kurva fungsi
+        self.ax.plot(
+            x_values,
+            y_values,
+            color="#39C8F4",
+            linewidth=3,
+            label=f"f(x) = {fungsi_teks}"
+        )
+
+        # Garis sumbu X
+        self.ax.axhline(
+            0,
+            color="#91A1C3",
+            linewidth=1
+        )
+
+        # Garis sumbu Y
+        self.ax.axvline(
+            0,
+            color="#91A1C3",
+            linewidth=1
+        )
+
+        # Titik akar dengan garis tepi putih
+        self.ax.scatter(
+            [akar],
+            [f(akar)],
+            color="#42D7D0",
+            edgecolors="white",
+            linewidths=2,
+            s=110,
+            zorder=5
+        )
+
+        # Garis vertikal putus-putus
+        self.ax.vlines(
+            x=akar,
+            ymin=self.ax.get_ylim()[0],
+            ymax=0,
+            colors="#42D7D0",
+            linestyles="dashed",
+            linewidth=1.5,
+            alpha=0.8
+        )
+        self.ax.annotate(
+            f"AKAR DITEMUKAN\nx ≈ {akar:.6f}",
+            xy=(akar, f(akar)),
+            xytext=(80, -45),
+            textcoords="offset points",
+            color="#42D7D0",
+            fontsize=10,
+            fontweight="bold",
+            bbox=dict(
+                boxstyle="round,pad=0.8",
+                facecolor="#10283F",
+                edgecolor="#42D7D0",
+                linewidth=1
+            ),
+            arrowprops=dict(
+                arrowstyle="-",
+                color="#42D7D0",
+                linewidth=1
+            )
+        )
+        # Grid
+        self.ax.grid(
+            True,
+            color="#344465",
+            alpha=0.5
+        )
+
+        # Warna angka pada sumbu
+        self.ax.tick_params(
+            colors="#A9B5D0"
+        )
+
+        # Warna garis tepi
+        for spine in self.ax.spines.values():
+            spine.set_color("#344465")
+
+        # Legend
+        self.ax.legend(
+            facecolor="#1B2949",
+            labelcolor="white",
+            edgecolor="#344465"
+        )
+
+        self.figure.tight_layout()
+
+        # Perbarui tampilan
+        self.canvas.draw()
