@@ -616,6 +616,22 @@ class NewtonApp(QWidget):
                 "iterasi_solusi": iterasi_solusi,
                 "konvergen": iterasi_solusi is not None
             }
+
+            # Simpan hasil ke riwayat
+            self.history_data.append(self.last_result)
+
+            # Perbarui halaman hasil
+            self.result_page.update_result(self.last_result)
+
+            # Pindah ke halaman hasil
+            self.show_result()
+
+            # Kirim hasil perhitungan ke halaman hasil
+            self.result_page.update_result(self.last_result)
+
+            # Pindah ke halaman hasil
+            self.show_result()
+
         except (
             ValueError,
             ZeroDivisionError,
@@ -630,10 +646,20 @@ class NewtonApp(QWidget):
                 str(error)
             )
 
+    def show_history(self):
+        self.history_page.update_history(self.history_data)
 
+        self.pages.setCurrentIndex(2)
+        self.set_active_menu(self.btn_history)
 
+    def open_history_result(self, index):
+        if 0 <= index < len(self.history_data):
+            result = self.history_data[index]
 
+            self.last_result = result
 
+            self.result_page.update_result(result)
+            self.show_result()
 
 
 if __name__ == "__main__":
