@@ -143,3 +143,17 @@ info_layout.addWidget(function_label)
                     background-color: #305C75;
                 }
             """)
+
+# Simpan indeks riwayat yang dipilih
+            btn_open.clicked.connect(
+                lambda checked=False, i=index:
+                self.result_selected.emit(i)
+            )
+
+            card_layout.addLayout(info_layout)
+            card_layout.addStretch()
+            card_layout.addWidget(btn_open)
+
+            self.history_layout.addWidget(card)
+
+        self.history_layout.addStretch()
