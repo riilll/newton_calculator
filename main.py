@@ -346,6 +346,43 @@ class NewtonApp(QWidget):
 
         content_layout.addStretch()
 
+        # ===== HALAMAN HASIL =====
+        self.result_page = ResultPage()
+
+        result_scroll = QScrollArea()
+        result_scroll.setWidgetResizable(True)
+        result_scroll.setFrameShape(QFrame.Shape.NoFrame)
+        result_scroll.setWidget(self.result_page)
+
+        result_scroll.setStyleSheet("""
+            QScrollArea {
+                background-color: #050B26;
+                border: none;
+            }
+        """)
+
+        # Masukkan kedua halaman
+        self.pages.addWidget(calculator_page)
+        self.pages.addWidget(result_scroll)
+        self.history_page = HistoryPage()
+        self.pages.addWidget(self.history_page)
+
+        # Tampilkan kalkulator pertama kali
+        self.pages.setCurrentIndex(0)
+
+        body_layout.addWidget(self.pages, 1)
+        main_layout.addLayout(body_layout, 1)
+
+                # ===== NAVIGASI =====
+        self.btn_calculator.clicked.connect(self.show_calculator)
+        self.btn_result.clicked.connect(self.show_result)
+        self.result_page.btn_again.clicked.connect(self.show_calculator)
+        self.btn_history.clicked.connect(self.show_history)
+        self.history_page.result_selected.connect(
+            self.open_history_result
+        )
+
+
     def create_input_card(self, label_text, default_value):
         card = QFrame()
         card.setObjectName("inputCard")
@@ -373,6 +410,32 @@ class NewtonApp(QWidget):
         self.input_initial.clear()
         self.input_tolerance.clear()
         self.input_iteration.clear()
+
+    def show_calculator(self):
+        self.pages.setCurrentIndex(0)
+        self.set_active_menu(self.btn_calculator)
+
+    def show_result(self):
+        self.pages.setCurrentIndex(1)
+        self.set_active_menu(self.btn_result)
+
+    def set_active_menu(self, active_button):
+        buttons = [
+            self.btn_calculator,
+            self.btn_result,
+            self.btn_history
+        ]
+
+        for button in buttons:
+            if button == active_button:
+                button.setObjectName("active")
+            else:
+                button.setObjectName("")
+
+            button.style().unpolish(button)
+            button.style().polish(button)
+            button.update()   
+
 
 
 
