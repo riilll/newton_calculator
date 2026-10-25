@@ -38,3 +38,27 @@ class HistoryPage(QWidget):
 
         layout.addWidget(title)
         layout.addWidget(subtitle)
+
+# ===== AREA SCROLL RIWAYAT =====
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+
+        scroll.setStyleSheet("""
+            QScrollArea {
+                background: transparent;
+                border: none;
+            }
+        """)
+
+        self.container = QWidget()
+        self.history_layout = QVBoxLayout(self.container)
+        self.history_layout.setSpacing(15)
+        self.history_layout.setContentsMargins(0, 10, 10, 10)
+
+        self.history_layout.addStretch()
+
+        scroll.setWidget(self.container)
+        layout.addWidget(scroll)
+
+    def update_history(self, history):
