@@ -346,6 +346,10 @@ class NewtonApp(QWidget):
 
         content_layout.addStretch()
 
+        # ===== RESET INPUT =====
+        self.btn_reset.clicked.connect(self.reset_inputs)
+        self.btn_calculate.clicked.connect(self.calculate_root)
+
         # ===== HALAMAN HASIL =====
         self.result_page = ResultPage()
 
